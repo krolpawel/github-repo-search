@@ -1,6 +1,6 @@
 //@flow
 import React, { Component } from 'react';
-import { Dimensions, Text, View, StyleSheet } from "react-native";
+import { Dimensions, Text, View, StyleSheet, Platform } from "react-native";
 import {
     Button,
     Input,
@@ -67,7 +67,7 @@ class SearchScreen extends Component<SearchScreenProp> {
                 <Spinner size="small"/>
               </View>}
           </Section>
-          {capitalizedError && <Text style={errorMessage}>
+          {!!capitalizedError && <Text style={errorMessage}>
             Don't use capital letters
           </Text>}
           {/* <Section>
@@ -78,7 +78,7 @@ class SearchScreen extends Component<SearchScreenProp> {
               data={recentSearched}
               style={listStyle}
               extraData={recentSearched.length} />}
-            {repositories.length && <RepositoriesList
+            {!!repositories.length && <RepositoriesList
               data={repositories}
               style={listStyle} />}
           </Section>
@@ -162,7 +162,14 @@ const styles = StyleSheet.create({
   },
   rootView: {
     flex: 1,
-    marginTop: 40,
+    ...Platform.select({
+      ios: {
+        marginTop: 40,
+      },
+      android: {
+        marginTop: 10
+      }
+    })
   },
   searchSection: {
     marginLeft: 20,

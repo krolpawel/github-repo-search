@@ -1,6 +1,6 @@
 //@flow
 import React, { Component } from 'react';
-import { Dimensions, Text, View, StyleSheet } from "react-native";
+import { Dimensions, Text, View, StyleSheet, Platform } from "react-native";
 import {
     Button,
     Input,
@@ -67,18 +67,15 @@ class SearchScreen extends Component<SearchScreenProp> {
                 <Spinner size="small"/>
               </View>}
           </Section>
-          {capitalizedError && <Text style={errorMessage}>
+          {!!capitalizedError && <Text style={errorMessage}>
             Don't use capital letters
           </Text>}
-          {/* <Section>
-            <Text>Found repos: {repositoriesCount}</Text>
-          </Section> */}
           <Section style={listSection}>
             {!repositories.length && <RecentSearchList
               data={recentSearched}
               style={listStyle}
               extraData={recentSearched.length} />}
-            {repositories.length && <RepositoriesList
+            {!!repositories.length && <RepositoriesList
               data={repositories}
               style={listStyle} />}
           </Section>
@@ -100,7 +97,6 @@ class SearchScreen extends Component<SearchScreenProp> {
   }
 
   computeTotalStars() {
-    console.log('compouting stars');
     let count = 0;
     _.each(this.props.selectedItems, (selectedItem) => {
       const itemInResults = this.props.repositories.find((item) => item.id === selectedItem);
@@ -162,7 +158,14 @@ const styles = StyleSheet.create({
   },
   rootView: {
     flex: 1,
-    marginTop: 40,
+    ...Platform.select({
+      ios: {
+        marginTop: 40,
+      },
+      android: {
+        marginTop: 10
+      }
+    })
   },
   searchSection: {
     marginLeft: 20,

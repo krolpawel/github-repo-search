@@ -11,10 +11,8 @@ const credentials = ghClientId && ghClientSecret ? `&client_id=${ghClientId}&cli
 
 function* fetchRepositories(action) {
     try {
-        //TODO: process to safe text
         const encodedQuery: string = action.payload;
         const repositoriesResponse = yield fetch(`https://api.github.com/search/repositories?q=${encodedQuery}${credentials}`).then((response) => { return response.json() });
-        console.log(repositoriesResponse);
         yield put({ type: FETCH_REPOSITORIES_SUCCESS, payload: repositoriesResponse });
     } catch (e) {
         yield put({ type: FETCH_REPOSITORIES_FAILURE, payload: e.message });

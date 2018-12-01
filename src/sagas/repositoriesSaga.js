@@ -7,13 +7,13 @@ const ghData = require('../../.ghCredentials.json');
 
 const ghClientId = ghData.ghClientId;
 const ghClientSecret = ghData.ghClientSecret;
-const credentials = `&client_id=${ghClientId}&client_secret=${ghClientSecret}`;
+const credentials = ghClientId && ghClientSecret ? `&client_id=${ghClientId}&client_secret=${ghClientSecret}` : '';
 
 function* fetchRepositories(action) {
     try {
         //TODO: process to safe text
         const encodedQuery: string = action.payload;
-        const repositoriesResponse = yield fetch(`https://api.github.com/search/repositories?q=${encodedQuery}${ghClientId && ghClientSecret ? credentials}`).then((response) => { return response.json() });
+        const repositoriesResponse = yield fetch(`https://api.github.com/search/repositories?q=${encodedQuery}${credentials}`).then((response) => { return response.json() });
         console.log(repositoriesResponse);
         yield put({ type: FETCH_REPOSITORIES_SUCCESS, payload: repositoriesResponse });
     } catch (e) {

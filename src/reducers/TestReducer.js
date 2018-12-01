@@ -6,7 +6,6 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case FETCH_VALUE:
-            console.log('catch FETCH_VALUE: ' + action.payload);
             return { ...state, searchText: action.payload };
         case RECENT_SEARCH_ITEM_CLICKED:
             return { ...state, searchedText: action.payload }

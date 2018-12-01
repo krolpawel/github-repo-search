@@ -51,11 +51,8 @@ export default (state: reducerStateType = INITIAL_STATE, action: any) => {
                 fetchingRepositories: true,
             };
         case FETCH_REPOSITORIES_SUCCESS:
-            console.log("repositories fetched!");
-            console.log(action.payload);
             return { ...state, repositories: action.payload.items, repositoriesCount: action.payload.total_count, fetchingRepositories: false };
         case FETCH_REPOSITORIES_FAILURE:
-            console.log('repo fetching failure. exception: ' + action.payload);
             return { ...state, fetchingRepositories: false };
         case ITEM_SELECTED:
             state.selectedItems.push(action.payload);

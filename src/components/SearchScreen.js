@@ -70,9 +70,6 @@ class SearchScreen extends Component<SearchScreenProp> {
           {!!capitalizedError && <Text style={errorMessage}>
             Don't use capital letters
           </Text>}
-          {/* <Section>
-            <Text>Found repos: {repositoriesCount}</Text>
-          </Section> */}
           <Section style={listSection}>
             {!repositories.length && <RecentSearchList
               data={recentSearched}
@@ -100,7 +97,6 @@ class SearchScreen extends Component<SearchScreenProp> {
   }
 
   computeTotalStars() {
-    console.log('compouting stars');
     let count = 0;
     _.each(this.props.selectedItems, (selectedItem) => {
       const itemInResults = this.props.repositories.find((item) => item.id === selectedItem);

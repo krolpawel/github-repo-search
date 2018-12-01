@@ -40,8 +40,6 @@ class RepositoriesList extends Component<RepositoriesListProp> {
 
   _onPressItem = (props) => {
     const { itemSelect, itemUnselect } = this.props;
-    console.log('props provided:');
-    console.log(props);
     typeof this.props.onPressItem === "function" ? this.props.onPressItem(props.htmlUrl) : (props.itemSelected ? itemUnselect(props.id) : itemSelect(props.id));
   };
 
@@ -128,9 +126,6 @@ class ListItem extends Component<ListItemProp> {
                     <Text style={itemRepoOwner}>{ownerLogin}</Text>
                   </View>
                 </View>
-                {/* <View>
-                  <Text>{created_at}</Text>
-                </View> */}
                 <View style={starsView}>
                   <Svg
                     width="14"
@@ -169,9 +164,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   itemView: {
-    //alignItems: 'center',
     justifyContent: 'flex-end',
-    //height: 40,
     borderBottomWidth: 1,
     borderColor: "#DDD",
     flex: 1,

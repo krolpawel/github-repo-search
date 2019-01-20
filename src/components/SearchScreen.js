@@ -1,6 +1,6 @@
 //@flow
 import React, { Component } from 'react';
-import { Dimensions, Text, View, StyleSheet, Platform } from "react-native";
+import { Dimensions, Text, View, StyleSheet, Platform, Image, LayoutAnimation } from "react-native";
 import {
     Button,
     Input,
@@ -34,6 +34,10 @@ type SearchScreenProp = {
   navigation: any,
 }
 class SearchScreen extends Component<SearchScreenProp> {
+  componentWillReceiveProps() {
+    LayoutAnimation.easeInEaseOut();
+  }
+
   render() {
     const {
       searchText,
@@ -55,12 +59,17 @@ class SearchScreen extends Component<SearchScreenProp> {
       spinnerContainer,
       errorMessage,
       listStyle,
-      listSection
+      listSection,
+      appLogo,
+      headerViewLogo,
+      appLogoWithSearch,
     } = styles;
-
     return (
       <View style={rootView}>
         <Screen style={screen}>
+          <View style={headerViewLogo}>
+            <Image source={require('../../logo/logo-1024.png')} style={[appLogo, repositories.length && appLogoWithSearch]} />
+          </View>
           <Section style={[searchSection, capitalizedError && textFieldError]}>
             <Input placeholder="Search repo..." onChangeText={text => this.searchTextChanged(text)} value={searchText} />
               {fetchingRepositories && <View style={spinnerContainer}>
@@ -146,6 +155,20 @@ class SearchScreen extends Component<SearchScreenProp> {
 }
 
 const styles = StyleSheet.create({
+  headerViewLogo: {
+    width: width,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginBottom: 20
+  },
+  appLogo: {
+    width: width / 2,
+    height: width / 2
+  },
+  appLogoWithSearch: {
+    width: width / 4,
+    height: width / 4
+  },
   listSection: {
     height: height - 135
   },
@@ -160,7 +183,7 @@ const styles = StyleSheet.create({
     flex: 1,
     ...Platform.select({
       ios: {
-        marginTop: 40,
+        marginTop: 40
       },
       android: {
         marginTop: 10
@@ -171,20 +194,19 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     borderWidth: 1,
-    marginBottom: 10,
+    marginBottom: 10
   },
   totalStarsView: {
-    backgroundColor: '#DDD',
-    position: 'absolute',
+    backgroundColor: "#DDD",
+    position: "absolute",
     bottom: 0,
     height: 40,
     width: width,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    alignItems: "center",
+    justifyContent: "space-around",
     flex: 1,
-    flexDirection: 'row',
-    padding: 5,
-    
+    flexDirection: "row",
+    padding: 5
   },
   spinnerContainer: {
     width: 5,

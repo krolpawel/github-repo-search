@@ -15,7 +15,7 @@ type RecentSearchedListProps = {
 };
 
 class RecentSearchedList extends Component<RecentSearchedListProps> {
-    _keyExtractor = (item, index) => item.id;
+    _keyExtractor = (item, index) => item.toString();
 
     componentWillReceiveProps(nextProps) {
         LayoutAnimation.easeInEaseOut();
@@ -31,6 +31,7 @@ class RecentSearchedList extends Component<RecentSearchedListProps> {
                     data={data}
                     extraData={extraData}
                     renderItem={this._renderItem}
+                    keyExtractor={this._keyExtractor}
                 />
             </View>
         );
@@ -44,7 +45,7 @@ class RecentSearchedList extends Component<RecentSearchedListProps> {
     _renderItem = ({ item }) => {
         return <RecentSearchedListItem
             style={this.props.styles}
-            id={item}
+            id={item.id}
             onPressItem={this._onPressItem}
             searchedString={item}
         />

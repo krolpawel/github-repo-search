@@ -19,7 +19,7 @@ type RepositoriesListProp = {
 }
 class RepositoriesList extends Component<RepositoriesListProp> {
   totalStars = 0;
-  _keyExtractor = (item, index) => item.id;
+  _keyExtractor = (item, index) => item.id.toString();
 
   componentWillReceiveProps(nextProps) {
     LayoutAnimation.easeInEaseOut();

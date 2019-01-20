@@ -51,7 +51,7 @@ class RepositoriesList extends Component<RepositoriesListProp> {
 
     const selected = !!this.props.selectedItems.find((value) => value === item.id);
     if (selected) {
-      this.totalStars += item.stars;
+      totalStars += item.stars;
     }
     return <ListItem
         style={this.props.styles}

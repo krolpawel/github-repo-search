@@ -1,23 +1,34 @@
-//@flow
+import PropTypes from 'prop-types';
 import React from 'react';
 import {
-    ActivityIndicator,
-    StyleSheet,
-    View
+  ActivityIndicator,
+  StyleSheet,
+  View,
 } from 'react-native';
 
-const Spinner = ({ size }: { size: number | "large" | "small" }) => (
+const styles = StyleSheet.create({
+  spinnerStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+
+const Spinner = ({ size }) => (
     <View style={styles.spinnerStyle}>
         <ActivityIndicator size={size || 'large'} />
     </View>
 );
 
-const styles = StyleSheet.create({
-    spinnerStyle: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-});
+Spinner.propTypes = {
+  size: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([
+      'small',
+      'large',
+    ]),
+  ]),
+};
 
-export { Spinner };
+export default Spinner;

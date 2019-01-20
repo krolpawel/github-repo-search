@@ -1,1 +1,1 @@
-export * from './repositoriesSaga';
+export default from './repositoriesSaga';

@@ -1,26 +1,41 @@
-//@flow
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
 import {
   StyleSheet,
   Text,
   TextInput,
   View,
-} from "react-native";
+} from 'react-native';
 
-type PropType = {
-  label: string,
-  value: string,
-  onChangeText: Function,
-  placeholder: string,
-  secureTextEntry: boolean
-}
+const styles = StyleSheet.create({
+  inputStyle: {
+    color: '#000',
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontSize: 18,
+    lineHeight: 23,
+    flex: 2,
+  },
+  labelStyle: {
+    fontSize: 18,
+    paddingLeft: 20,
+    flex: 1,
+  },
+  containerStyle: {
+    height: 40,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
+
 const Input = ({
   label,
   value,
   onChangeText,
   placeholder,
-  secureTextEntry
-}: PropType) => {
+  secureTextEntry,
+}) => {
   const { inputStyle, labelStyle, containerStyle } = styles;
   return (
     <View style={containerStyle}>
@@ -38,26 +53,12 @@ const Input = ({
   );
 };
 
-const styles = StyleSheet.create({
-  inputStyle: {
-    color: "#000",
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 18,
-    lineHeight: 23,
-    flex: 2,
-  },
-  labelStyle: {
-    fontSize: 18,
-    paddingLeft: 20,
-    flex: 1
-  },
-  containerStyle: {
-    height: 40,
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center"
-  }
-});
+Input.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.string,
+  onChangeText: PropTypes.func,
+  placeholder: PropTypes.string,
+  secureTextEntry: PropTypes.bool,
+};
 
-export { Input };
+export default Input;

@@ -1,24 +1,26 @@
-//@flow
-import React from "react";
+import { PropTypes } from 'prop-types';
+import React from 'react';
 import {
   StyleSheet,
-  View
-} from "react-native";
-
-const Screen = (props: { children: React.Component<> }) => {
-  return <View style={styles.containerStyle}>{props.children}</View>;
-};
+  View,
+} from 'react-native';
 
 const styles = StyleSheet.create({
   containerStyle: {
     borderRadius: 2,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     borderBottomWidth: 0,
     elevation: 1,
     marginLeft: 5,
     marginRight: 5,
-    marginTop: 0
-  }
+    marginTop: 0,
+  },
 });
 
-export { Screen };
+const Screen = ({ children }) => <View style={styles.containerStyle}>{children}</View>;
+
+Screen.propTypes = {
+  children: PropTypes.node,
+};
+
+export default Screen;

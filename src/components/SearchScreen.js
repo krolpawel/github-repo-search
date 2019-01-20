@@ -1,9 +1,12 @@
-//@flow
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Dimensions, Text, View, StyleSheet, Platform, Image, LayoutAnimation } from "react-native";
-import _ from 'lodash';
-import { connect } from "react-redux";
-import { repositoriesFetch, searchedValueFetch, userTyping, capitalizedErrorChange, clearRepositoriesList } from '../actions';
+import {
+  Dimensions, Text, View, StyleSheet, Platform, Image, LayoutAnimation,
+} from 'react-native';
+import { connect } from 'react-redux';
+import {
+  repositoriesFetch, searchedValueFetch, userTyping, capitalizedErrorChange, clearRepositoriesList,
+} from '../actions';
 import {
   Button,
   Input,
@@ -11,30 +14,83 @@ import {
   Section,
   Spinner,
 } from './common';
-import RepositoriesList from "./RepositoriesList";
-import RecentSearchList from "./RecentSearchList";
+import RepositoriesList from './RepositoriesList';
+import RecentSearchList from './RecentSearchList';
+
+const logoImage = require('../../logo/logo-1024.png');
 
 const { height, width } = Dimensions.get('window');
 
-type SearchScreenProp = {
-  searchText: string,
-  fetchingRepositories: boolean,
-  onSearch: Function,
-  repoFetch: Function,
-  searchTextFetch: Function,
-  repositoriesCount: number,
-  repositories: Array<any>,
-  capitalizedError: boolean,
-  recentSearched: Array<string>,
-  resetRepoList: Function,
-  userTyping: Function,
-  capitalizedErrorChange: Function,
-  userTyped: any,
-  selectedItems: Array<string>,
-  navigation: any,
-}
-class SearchScreen extends Component<SearchScreenProp> {
-  componentWillReceiveProps() {
+const styles = StyleSheet.create({
+  headerViewLogo: {
+    width,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  appLogo: {
+    width: width / 2,
+    height: width / 2,
+  },
+  appLogoWithSearch: {
+    width: width / 4,
+    height: width / 4,
+  },
+  listSection: {
+    height: height - 135,
+  },
+  listStyle: {
+    height: 50,
+  },
+  screen: {
+    borderWidth: 0,
+    height: 400,
+  },
+  rootView: {
+    flex: 1,
+    ...Platform.select({
+      ios: {
+        marginTop: 40,
+      },
+      android: {
+        marginTop: 10,
+      },
+    }),
+  },
+  searchSection: {
+    marginLeft: 20,
+    marginRight: 20,
+    borderWidth: 1,
+    marginBottom: 10,
+  },
+  totalStarsView: {
+    backgroundColor: '#DDD',
+    position: 'absolute',
+    bottom: 0,
+    height: 40,
+    width,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flex: 1,
+    flexDirection: 'row',
+    padding: 5,
+  },
+  spinnerContainer: {
+    width: 5,
+    marginRight: 20,
+    position: 'relative',
+  },
+  textFieldError: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  errorMessage: {
+    color: 'red',
+  },
+});
+
+class SearchScreen extends Component {
+  static getDerivedStateFromProps() {
     LayoutAnimation.easeInEaseOut();
   }
 
@@ -42,10 +98,6 @@ class SearchScreen extends Component<SearchScreenProp> {
     const {
       searchText,
       fetchingRepositories,
-      onSearch,
-      repoFetch,
-      searchTextFetch,
-      repositoriesCount,
       repositories,
       capitalizedError,
       recentSearched,
@@ -68,7 +120,7 @@ class SearchScreen extends Component<SearchScreenProp> {
       <View style={rootView}>
         <Screen style={screen}>
           <View style={headerViewLogo}>
-            <Image source={require('../../logo/logo-1024.png')} style={[appLogo, repositories.length && appLogoWithSearch]} />
+            <Image source={logoImage} style={[appLogo, repositories.length && appLogoWithSearch]} />
           </View>
           <Section style={[searchSection, capitalizedError && textFieldError]}>
             <Input placeholder="Search repo..." onChangeText={text => this.searchTextChanged(text)} value={searchText} />
@@ -77,7 +129,7 @@ class SearchScreen extends Component<SearchScreenProp> {
               </View>}
           </Section>
           {!!capitalizedError && <Text style={errorMessage}>
-            Don't use capital letters
+            Don&apos;t use capital letters
           </Text>}
           <Section style={listSection}>
             {!repositories.length && <RecentSearchList
@@ -106,32 +158,32 @@ class SearchScreen extends Component<SearchScreenProp> {
   }
 
   computeTotalStars() {
+    const { selectedItems, repositories } = this.props;
     let count = 0;
-    _.each(this.props.selectedItems, (selectedItem) => {
-      const itemInResults = this.props.repositories.find((item) => item.id === selectedItem);
-      if(itemInResults)
-        count += itemInResults.stars;
+
+    selectedItems.forEach((selectedItem) => {
+      const itemInResults = repositories.find(item => item.id === selectedItem);
+      if (itemInResults) count += itemInResults.stars;
     });
-    
-    return this.bigStars(count);
+
+    return this.constructor.bigStars(count);
   }
 
-  bigStars(stars) {
-    if (stars >= 1000000)
-      return (stars / 1000000).toFixed(1) + 'M';
-    if (stars >= 1000)
-      return (stars / 1000).toFixed(1) + 'k';
+  static bigStars(stars) {
+    if (stars >= 1000000) return `${(stars / 1000000).toFixed(1)}M`;
+    if (stars >= 1000) return `${(stars / 1000).toFixed(1)}k`;
     return stars;
   }
 
   searchTextChanged(searchedText) {
     const { userTyped, capitalizedError } = this.props;
 
-    if (searchedText != searchedText.toLowerCase() && !capitalizedError) {
+    if (searchedText !== searchedText.toLowerCase() && !capitalizedError) {
       this.props.capitalizedErrorChange(true);
       return;
-    } else if (capitalizedError) {
-      if (searchedText == searchedText.toLowerCase()) {
+    }
+    if (capitalizedError) {
+      if (searchedText === searchedText.toLowerCase()) {
         this.props.capitalizedErrorChange(false);
       } else {
         return;
@@ -145,7 +197,7 @@ class SearchScreen extends Component<SearchScreenProp> {
       this.props.userTyping(
         setTimeout(() => {
           this.props.repoFetch(searchedText);
-        }, 500)
+        }, 500),
       );
     }
     if (!searchedText.length) {
@@ -154,108 +206,52 @@ class SearchScreen extends Component<SearchScreenProp> {
   }
 }
 
-const styles = StyleSheet.create({
-  headerViewLogo: {
-    width: width,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginBottom: 20
-  },
-  appLogo: {
-    width: width / 2,
-    height: width / 2
-  },
-  appLogoWithSearch: {
-    width: width / 4,
-    height: width / 4
-  },
-  listSection: {
-    height: height - 135
-  },
-  listStyle: {
-    height: 50
-  },
-  screen: {
-    borderWidth: 0,
-    height: 400
-  },
-  rootView: {
-    flex: 1,
-    ...Platform.select({
-      ios: {
-        marginTop: 40
-      },
-      android: {
-        marginTop: 10
-      }
-    })
-  },
-  searchSection: {
-    marginLeft: 20,
-    marginRight: 20,
-    borderWidth: 1,
-    marginBottom: 10
-  },
-  totalStarsView: {
-    backgroundColor: "#DDD",
-    position: "absolute",
-    bottom: 0,
-    height: 40,
-    width: width,
-    alignItems: "center",
-    justifyContent: "space-around",
-    flex: 1,
-    flexDirection: "row",
-    padding: 5
-  },
-  spinnerContainer: {
-    width: 5,
-    marginRight: 20,
-    position: "relative"
-  },
-  textFieldError: {
-    borderColor: "red",
-    borderWidth: 1
-  },
-  errorMessage: {
-    color: 'red'
-  }
-});
-
-const mapStateToProps = (state) => {
-  return {
-    searchText: state.test.searchedText,
-    repositories: _.map(state.repositories.repositories, (repo) => {
-      return {
-        id: repo.id,
-        name: repo.name,
-        stars: repo.stargazers_count,
-        created_at: repo.created_at,
-        owner: {
-          login: repo.owner.login,
-          avatarUrl: repo.owner.avatar_url
-        },
-        htmlUrl: repo.html_url
-      }
-    }),
-    selectedItems: state.repositories.selectedItems,
-    repositoriesCount: state.repositories.repositoriesCount,
-    userTyped: state.repositories.userTyped,
-    fetchingRepositories: state.repositories.fetchingRepositories,
-    capitalizedError: state.repositories.capitalizedError,
-    recentSearched: state.repositories.recentSearched,
-  };
+SearchScreen.propTypes = {
+  searchText: PropTypes.string,
+  fetchingRepositories: PropTypes.boolean,
+  onSearch: PropTypes.fun,
+  repoFetch: PropTypes.func,
+  searchTextFetch: PropTypes.func,
+  repositoriesCount: PropTypes.number,
+  repositories: PropTypes.arrayOf(PropTypes.object),
+  capitalizedError: PropTypes.boolean,
+  recentSearched: PropTypes.arrayOf(PropTypes.string),
+  resetRepoList: PropTypes.func,
+  userTyping: PropTypes.func,
+  capitalizedErrorChange: PropTypes.func,
+  userTyped: PropTypes.string,
+  selectedItems: PropTypes.arrayOf(PropTypes.number),
+  navigation: PropTypes.object,
 };
-const mapDispatchToProps = (dispatch) => {
-  return {
-    resetRepoList: () => dispatch(clearRepositoriesList()),
-    repoFetch: searchText => dispatch(repositoriesFetch(searchText)),
-    searchTextFetch: searchedText => dispatch(searchedValueFetch(searchedText)),
-    userTyping: timeoutF => dispatch(userTyping(timeoutF)),
-    capitalizedErrorChange: status => dispatch(capitalizedErrorChange(status)),
-  };
-}
+
+const mapStateToProps = state => ({
+  searchText: state.test.searchedText,
+  repositories: state.repositories.repositories.map(repo => ({
+    id: repo.id,
+    name: repo.name,
+    stars: repo.stargazers_count,
+    created_at: repo.created_at,
+    owner: {
+      login: repo.owner.login,
+      avatarUrl: repo.owner.avatar_url,
+    },
+    htmlUrl: repo.html_url,
+  })),
+  selectedItems: state.repositories.selectedItems,
+  repositoriesCount: state.repositories.repositoriesCount,
+  userTyped: state.repositories.userTyped,
+  fetchingRepositories: state.repositories.fetchingRepositories,
+  capitalizedError: state.repositories.capitalizedError,
+  recentSearched: state.repositories.recentSearched,
+});
+const mapDispatchToProps = dispatch => ({
+  resetRepoList: () => dispatch(clearRepositoriesList()),
+  repoFetch: searchText => dispatch(repositoriesFetch(searchText)),
+  searchTextFetch: searchedText => dispatch(searchedValueFetch(searchedText)),
+  userTyping: timeoutF => dispatch(userTyping(timeoutF)),
+  capitalizedErrorChange: status => dispatch(capitalizedErrorChange(status)),
+});
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SearchScreen);

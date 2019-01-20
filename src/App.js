@@ -3,25 +3,20 @@
 //@flow
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { createStore, compose, applyMiddleware } from 'redux';
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import { Text, View } from 'react-native';
-import reducers from "./reducers";
-import createSagaMiddleware from "redux-saga";
-import repositoriesSaga from "./sagas/repositoriesSaga";
+import { PersistGate } from 'redux-persist/integration/react'
 import SearchScreen from "./components/SearchScreen";
 import SelectedReposScreen from "./components/SelectedReposScreen";
+import configureStore from './configureStore';
+const { store, persistor } = configureStore();
 
 class App extends Component<{}> {
   render() {
-    const sagaMiddleware = createSagaMiddleware();
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-    const store = createStore(reducers, composeEnhancers(applyMiddleware(sagaMiddleware)));
-    sagaMiddleware.run(repositoriesSaga);
-
     return (
       <Provider store={store}>
-        <AppContainer />
+        <PersistGate loading={null} persistor={persistor}>
+          <AppContainer />
+        </PersistGate>
       </Provider>
     );
   }

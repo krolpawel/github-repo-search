@@ -8,7 +8,8 @@ import {
     ITEM_SELECTED,
     ITEM_UNSELECTED,
     REMOVE_ITEM,
-    CLEAR_REPOSITORIES_LIST
+    CLEAR_REPOSITORIES_LIST,
+    CLEAR_RECENT
 } from "../actions/types";
 
 type reducerStateType = {
@@ -34,6 +35,8 @@ import _ from 'lodash';
 
 export default (state: reducerStateType = INITIAL_STATE, action: any) => {
     switch (action.type) {
+        case CLEAR_RECENT:
+            return { ...state, recentSearched: [] };
         case CAPITALIZED_ERROR_CHANGE:
             return { ...state, capitalizedError: action.payload };
         case USER_TYPING:

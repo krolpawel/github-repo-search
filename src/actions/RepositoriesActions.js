@@ -8,11 +8,15 @@ import {
     ITEM_UNSELECTED,
     RECENT_SEARCH_ITEM_CLICKED,
     REMOVE_ITEM,
-    USER_TYPING
+    USER_TYPING,
+    CLEAR_RECENT,
 } from "./types";
 
 export const repositoriesFetch = (searchText: string): { type: string, payload: string } => {
     return { type: FETCH_REPOSITORIES_REQUEST, payload: searchText };
+};
+export const clearRecent = () => {
+    return { type: CLEAR_RECENT };
 };
 export const searchedValueFetch = (searchedText: string): { type: string, payload: string } => {
   return { type: FETCH_VALUE, payload: searchedText };

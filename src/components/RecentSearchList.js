@@ -4,8 +4,9 @@ import { connect } from "react-redux";
 import { StyleSheet, View, Text, Image, ScrollView, FlatList, TouchableOpacity, Animated, LayoutAnimation } from "react-native";
 import _ from 'lodash';
 import Svg, { Path } from 'react-native-svg';
-import { recentSearchItemClicked, repositoriesFetch } from "../actions";
+import { recentSearchItemClicked, repositoriesFetch, clearRecent } from "../actions";
 import Swipeable from 'react-native-swipeable';
+import { Button } from "./common";
 
 type RecentSearchedListProps = {
     data: Array<any>,
@@ -26,7 +27,10 @@ class RecentSearchedList extends Component<RecentSearchedListProps> {
 
         return (
             <View style={{ flex: 1 }}>
-                <Text style={{marginBottom: 15, fontWeight: 'bold'}}>Recent searched:</Text>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10}}>
+                    <Text style={[{fontWeight: 'bold'}, !data.length && {marginTop: 6}]}>Recent searched:</Text>
+                    {data.length && <Button onPress={this._clearRecent}>Clear</Button>}
+                </View>
                 <FlatList
                     data={data}
                     extraData={extraData}
@@ -36,6 +40,10 @@ class RecentSearchedList extends Component<RecentSearchedListProps> {
             </View>
         );
     }
+
+    _clearRecent = () => {
+        this.props.clearRecent();
+    };
 
     _onPressItem = (props) => {
         const { recentSearchItemClicked } = this.props;
@@ -111,6 +119,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
+        clearRecent: () => dispatch(clearRecent()),
         recentSearchItemClicked: (text) => {
             dispatch(recentSearchItemClicked(text));
             dispatch(repositoriesFetch(text))

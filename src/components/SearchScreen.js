@@ -1,16 +1,16 @@
 //@flow
 import React, { Component } from 'react';
 import { Dimensions, Text, View, StyleSheet, Platform, Image, LayoutAnimation } from "react-native";
-import {
-    Button,
-    Input,
-    Screen,
-    Section,
-    Spinner,
-} from './common';
 import _ from 'lodash';
 import { connect } from "react-redux";
 import { repositoriesFetch, searchedValueFetch, userTyping, capitalizedErrorChange, clearRepositoriesList } from '../actions';
+import {
+  Button,
+  Input,
+  Screen,
+  Section,
+  Spinner,
+} from './common';
 import RepositoriesList from "./RepositoriesList";
 import RecentSearchList from "./RecentSearchList";
 

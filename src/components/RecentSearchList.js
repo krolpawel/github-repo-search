@@ -28,8 +28,6 @@ const styles = StyleSheet.create({
 });
 
 class RecentSearchedList extends Component {
-    static keyExtractor = item => item.toString();
-
     static getDerivedDataFromState() {
       LayoutAnimation.easeInEaseOut();
     }
@@ -49,7 +47,7 @@ class RecentSearchedList extends Component {
                 data={data}
                 extraData={extraData}
                 renderItem={this.renderItem}
-                keyExtractor={this.keyExtractor}
+                keyExtractor={(item, index) => index.toString()}
             />
         </View>
       );

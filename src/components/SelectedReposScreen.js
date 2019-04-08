@@ -26,7 +26,7 @@ class SelectedReposScreen extends Component {
 
 SelectedReposScreen.propTypes = {
   repositories: PropTypes.array,
-  selectedItems: PropTypes.arrayOf(PropTypes.number),
+  selectedItems: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.array, PropTypes.number])),
 };
 
 const mapStateToProps = state => ({

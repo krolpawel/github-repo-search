@@ -90,8 +90,11 @@ const styles = StyleSheet.create({
 });
 
 class SearchScreen extends Component {
+  state={};
   static getDerivedStateFromProps() {
     LayoutAnimation.easeInEaseOut();
+
+    return null;
   }
 
   render() {
@@ -120,13 +123,13 @@ class SearchScreen extends Component {
       <View style={rootView}>
         <Screen style={screen}>
           <View style={headerViewLogo}>
-            <Image source={logoImage} style={[appLogo, repositories.length && appLogoWithSearch]} />
+            <Image source={logoImage} style={[appLogo, ((repositories.length || searchText.length) && appLogoWithSearch)]} />
           </View>
           <Section style={[searchSection, capitalizedError && textFieldError]}>
             <Input placeholder="Search repo..." onChangeText={text => this.searchTextChanged(text)} value={searchText} />
-              {fetchingRepositories && <View style={spinnerContainer}>
-                <Spinner size="small"/>
-              </View>}
+            {fetchingRepositories && <View style={spinnerContainer}>
+              <Spinner size="small" />
+            </View>}
           </Section>
           {!!capitalizedError && <Text style={errorMessage}>
             Don&apos;t use capital letters
@@ -146,7 +149,7 @@ class SearchScreen extends Component {
           <Button
             onPress={this.showSelectedList.bind(this)}
             disabled={!this.props.selectedItems.length}>
-              Show selected
+            Show selected
           </Button>
         </View>
       </View>
@@ -208,19 +211,18 @@ class SearchScreen extends Component {
 
 SearchScreen.propTypes = {
   searchText: PropTypes.string,
-  fetchingRepositories: PropTypes.boolean,
-  onSearch: PropTypes.fun,
+  fetchingRepositories: PropTypes.bool,
   repoFetch: PropTypes.func,
   searchTextFetch: PropTypes.func,
   repositoriesCount: PropTypes.number,
   repositories: PropTypes.arrayOf(PropTypes.object),
-  capitalizedError: PropTypes.boolean,
+  capitalizedError: PropTypes.bool,
   recentSearched: PropTypes.arrayOf(PropTypes.string),
   resetRepoList: PropTypes.func,
   userTyping: PropTypes.func,
   capitalizedErrorChange: PropTypes.func,
-  userTyped: PropTypes.string,
-  selectedItems: PropTypes.arrayOf(PropTypes.number),
+  userTyped: PropTypes.any,
+  selectedItems: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.array, PropTypes.number])),
   navigation: PropTypes.object,
 };
 

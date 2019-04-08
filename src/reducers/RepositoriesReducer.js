@@ -11,27 +11,27 @@ import {
   CLEAR_RECENT,
 } from '../actions/types';
 
-type reducerStateType = {
-    repositories: Array<any>,
-    repositoriesCount: number,
-    userTyped: ?number,
-    fetchingRepositories: boolean,
-    capitalizedError: boolean,
-    selectedItems: Array<string>,
-    recentSearched: Array<string>
-}
+// type reducerStateType = {
+//     repositories: Array<any>,
+//     repositoriesCount: number,
+//     userTyped: ?number,
+//     fetchingRepositories: boolean,
+//     capitalizedError: boolean,
+//     selectedItems: Array<string>,
+//     recentSearched: Array<string>
+// }
 
 const INITIAL_STATE = {
   repositories: [],
   repositoriesCount: 0,
-  userTyped: null,
+  userTyped: () => {},
   fetchingRepositories: false,
   capitalizedError: false,
   selectedItems: [],
   recentSearched: [],
 };
 
-export default (state: reducerStateType = INITIAL_STATE, action: any) => {
+export default (state = INITIAL_STATE, action) => {
   let elementIndex;
 
   switch (action.type) {
@@ -73,7 +73,7 @@ export default (state: reducerStateType = INITIAL_STATE, action: any) => {
       return {
         ...state,
         selectedItems: [
-          state.selectedItems.filter(item => item !== action.payload),
+          ...state.selectedItems.filter(item => item !== action.payload),
         ],
       };
     case REMOVE_ITEM:

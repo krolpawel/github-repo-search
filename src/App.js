@@ -6,6 +6,10 @@ import SearchScreen from './components/SearchScreen';
 import SelectedReposScreen from './components/SelectedReposScreen';
 import configureStore from './configureStore';
 
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+
+
 const { store, persistor } = configureStore();
 
 class App extends Component {

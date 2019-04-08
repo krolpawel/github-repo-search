@@ -26,7 +26,7 @@ export default () => {
       devTools({
         name: Platform.OS,
         realtime: true,
-      }) || null,
+      }),
     ),
   );
   const persistor = persistStore(store);

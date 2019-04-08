@@ -66,8 +66,6 @@ const styles = StyleSheet.create({
 class RepositoriesList extends Component {
   totalStars = 0;
 
-  static keyExtractor = item => item.id.toString();
-
   static getDerivedDataFromState() {
     LayoutAnimation.easeInEaseOut();
   }
@@ -80,7 +78,7 @@ class RepositoriesList extends Component {
       <FlatList
           data={sortedData}
           extraData={this.props.selectedItems.length}
-          keyExtractor={this.keyExtractor}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderItem}
         />
     );
@@ -123,9 +121,9 @@ class RepositoriesList extends Component {
 
 RepositoriesList.propTypes = {
   data: PropTypes.array,
-  selectedItems: PropTypes.arrayOf(PropTypes.string),
-  disableSelecting: PropTypes.boolean,
-  style: PropTypes.instanceOf(StyleSheet),
+  selectedItems: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.array, PropTypes.number])),
+  disableSelecting: PropTypes.bool,
+  style: PropTypes.any,
   removeItem: PropTypes.func,
   onPressItem: PropTypes.func,
   selectItem: PropTypes.func,
@@ -213,7 +211,7 @@ ListItem.propTypes = {
   name: PropTypes.string,
   stars: PropTypes.number,
   created_at: PropTypes.string,
-  itemSelected: PropTypes.boolean,
+  itemSelected: PropTypes.bool,
   id: PropTypes.number,
 };
 
